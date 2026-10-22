@@ -1,0 +1,13 @@
+event_id,student_id,event_type,event_date,duration_minutes,campus
+E013,S101,workshop,2024-10-01,60,St. Paul
+E014,S109,tutoring,2024-10-02,35,Online
+E015,S102,lms_log,2024-10-03,30,Online
+E016,S105,tutoring,2024-10-07,45,St. Paul
+E017,S103,workshop,2024-10-08,90,St. Paul
+E018,S110,lms_log,2024-10-10,15,Online
+E019,S106,tutoring,2024-10-14,55,St. Paul
+E020,S104,lms_log,2024-10-15,20,Online
+E021,S107,workshop,2024-10-17,60,Online
+E022,S108,tutoring,2024-10-21,40,St. Paul
+E023,S109,lms_log,2024-10-24,25,Online
+E024,S101,tutoring,2024-10-29,30,St. Paul
