@@ -1,0 +1,62 @@
+# Engagement table spec (version 1)
+# Simplified stand-in for a Delta Lake / Iceberg table log.
+# Every file in the engagement table has to follow these rules.
+
+table_name: engagement
+version: 1
+created_date: 2024-09-01
+location: lakehouse/engagement/
+file_format: csv
+description: Student engagement events from workshops, tutoring visits, and LMS activity.
+
+schema:
+  - name: event_id
+    type: string
+    required: true
+    notes: Unique ID for each event (E001, E002, ...)
+  - name: student_id
+    type: string
+    required: true
+    notes: Student ID (S101, S102, ...)
+  - name: event_type
+    type: string
+    required: true
+    allowed_values: [workshop, tutoring, lms_log]
+  - name: event_date
+    type: date
+    required: true
+    format: YYYY-MM-DD
+  - name: duration_minutes
+    type: integer
+    required: true
+    rules: must be greater than 0
+  - name: campus
+    type: string
+    required: true
+    allowed_values: [St. Paul, Online]
+
+partitions:
+  keys: [year, month]
+  source: folder path (year=YYYY/month=MM)
+  stored_in_file: false
+  example: lakehouse/engagement/year=2024/month=09/
+
+enforcement_rules:
+  - Every file must include all required columns in this schema.
+  - Column types must match (event_date must be a valid date, duration_minutes must be a whole number).
+  - event_type and campus must use one of the allowed values.
+  - event_id must be unique across the whole table, not just within one file.
+  - Files must be placed in the partition folder that matches their event_date.
+  - Files that break any rule are rejected and not added to the table.
+
+schema_evolution:
+  allowed_changes:
+    - Adding a new optional column
+  not_allowed_without_new_table:
+    - Removing a column
+    - Renaming a column
+    - Changing a column's type
+  process:
+    - Any schema change creates a new version of this file with the version number increased by 1.
+    - Older files stay as they are and are not rewritten.
+    - New optional columns read as NULL for files written before the change.
