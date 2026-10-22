@@ -1,0 +1,66 @@
+# Engagement table spec (version 2)
+# Adds one optional column. All v1 rules still apply.
+
+table_name: engagement
+version: 2
+previous_version: 1
+changed_date: 2024-11-01
+location: lakehouse/engagement/
+file_format: csv
+description: Student engagement events from workshops, tutoring visits, and LMS activity.
+
+change_log:
+  - version: 2
+    change: Added optional column delivery_mode
+    reason: Track whether an event happened in person or virtually.
+    applies_from_partition: year=2024/month=11
+    rewrote_old_files: false
+
+schema:
+  - name: event_id
+    type: string
+    required: true
+  - name: student_id
+    type: string
+    required: true
+  - name: event_type
+    type: string
+    required: true
+    allowed_values: [workshop, tutoring, lms_log]
+  - name: event_date
+    type: date
+    required: true
+    format: YYYY-MM-DD
+  - name: duration_minutes
+    type: integer
+    required: true
+    rules: must be greater than 0
+  - name: campus
+    type: string
+    required: true
+    allowed_values: [St. Paul, Online]
+  - name: delivery_mode
+    type: string
+    required: false
+    allowed_values: [in_person, virtual]
+    added_in_version: 2
+    default_for_older_files: NULL
+
+partitions:
+  keys: [year, month]
+  source: folder path (year=YYYY/month=MM)
+  stored_in_file: false
+
+enforcement_rules:
+  - All v1 rules still apply.
+  - Files written before version 2 are valid without delivery_mode.
+  - Files written from version 2 on should include delivery_mode, and if it has a value it must be in_person or virtual.
+  - A file that has delivery_mode with any other value is rejected.
+
+schema_evolution:
+  allowed_changes:
+    - Adding a new optional column
+  not_allowed_without_new_table:
+    - Removing a column
+    - Renaming a column
+    - Changing a column's type
