@@ -59,4 +59,4 @@ All results are saved in `duckdb_queries/query_results.txt`.
 
 ## AI assistance
 
-AI Assistance: I used Claude to help break down the weekly readings and better understand the core lakehouse concepts. It was helpful for brainstorming realistic columns for the student dataset and checking the DuckDB syntax for querying folder paths. git add lakehouse_reflection.md README.md
+AI Assistance: I used Claude to help break down the weekly readings and better understand the core lakehouse concepts. It was helpful for brainstorming realistic columns for the student dataset and checking the DuckDB syntax for querying folder paths. 
